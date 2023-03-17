@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+    <context:component-scan base-package="egov">
+       <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+    </context:component-scan>
+
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>classpath:/egovframework/message/message-common</value>
+				<value>classpath:/egovframework/rte/fdl/idgnr/messages/idgnr</value>
+				<value>classpath:/egovframework/rte/fdl/property/messages/properties</value>
+			</list>
+		</property>
+		<property name="cacheSeconds">
+			<value>60</value>
+		</property>
+	</bean>
+	
+	<bean id="leaveaTrace" class="egovframework.rte.fdl.cmmn.trace.LeaveaTrace">
+		<property name="traceHandlerServices">
+			<list>
+				<ref bean="traceHandlerService" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="traceHandlerService" class="egovframework.rte.fdl.cmmn.trace.manager.DefaultTraceHandleManager">
+		<property name="reqExpMatcher">
+			<ref bean="antPathMater" />
+		</property>
+		<property name="patterns">
+			<list>
+				<value>*</value>
+			</list>
+		</property>
+		<property name="handlers">
+			<list>
+				<ref bean="defaultTraceHandler" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="antPathMater" class="org.springframework.util.AntPathMatcher" />
+	<bean id="defaultTraceHandler" class="egovframework.rte.fdl.cmmn.trace.handler.DefaultTraceHandler" />
+	 
+	 
+ 	 <!-- 전자정부프레임워크에서 제공하는 거 사용 --> 
+ 		<!-- 페이징 처리 빈 --> 
+<!-- 	<bean id="textRenderer" class="egov.lib.util.DefaultPaginationRenderer" /> -->
+	<!-- 사용자들에게 페이지 번호에 하이퍼링크로 소스가 태그로 적용될 수 있게함  -->
+<!-- 	<bean id="imageRenderer" class="egov.lib.util.ImagePaginationRenderer" /> -->
+
+<!-- 	<bean id="paginationManager" class="egovframework.rte.ptl.mvc.tags.ui.pagination.DefaultPaginationManager"> -->
+		<!-- 전자정부프레임워크에서 제공되는 페이징 매니저임 -->
+	
+<!-- 		<property name="rendererType"> -->
+<!-- 			<map> -->
+<!-- 				<entry key="image" value-ref="imageRenderer" /> -->
+<!-- 				<entry key="text" value-ref="textRenderer" /> -->
+<!-- 			</map> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
+	 
+	 
+	<!-- 타환경사용 -->
+	<!-- 페이징 처리 빈 -->
+	<bean id="textRenderer"
+		class="egov.lib.pagination.DefaultPaginationRenderer" />
+		<bean id="imageRenderer"
+			class="egov.lib.pagination.ImagePaginationRenderer" />
+	
+		<bean id="myPaginationManager"
+			class="egov.lib.pagination.DefaultPaginationManager">
+			<property name="rendererType">
+				<map>
+					<entry key="image" value-ref="imageRenderer" />
+					<entry key="text" value-ref="textRenderer" />
+				</map>
+			</property>
+		</bean>
+
+	 
+</beans>

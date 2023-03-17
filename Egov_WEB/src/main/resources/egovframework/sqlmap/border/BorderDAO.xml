@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="egov.border.dao.BorderDAO">
+
+	<resultMap type = "java.util.HashMap" id="borderResultMap"></resultMap>
+	<!-- 결과를 HashMap이라는 resultMap으로 받겠다는 의미, ID를 MainDAO와 다르게 해야함(oracleResultMap과 다르게 해야함 -->
+	
+	<!-- 게시판 글쓰기 -->
+  	<select id="insertBorder" statementType="CALLABLE" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+  	CALL web_main.insertBorder(#{userId},#{userIp},#{title},#{mytextarea})
+  	</select>
+	<!-- id 는 함수 이름과 동일하게 해야함 -->
+  	
+  	
+  	
+	<!-- 게시판 보기 -->
+<!--   	<select id="selectBorder" statementType="CALLABLE" resultType="java.util.HashMap" parameterType="java.util.HashMap"> -->
+<!--   	CALL web_main.selectBorder(#{currentPage},#{recordCountPerPage},#{ref_cursor, mode=OUT, jdbcType=CURSOR, javaType=ResultSet, resultMap=borderResultMap}) -->
+
+  	<select id="selectBorder" statementType="CALLABLE" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+   { CALL web_main.selectBorder(#{currentPageNo},#{recordCountPerPage},#{ref_cursor, mode=OUT, jdbcType=CURSOR, javaType=ResultSet, resultMap=borderResultMap},#{list_count,javaType=INTEGER,mode=OUT,jdbcType=NUMERIC})}
+   </select>
+  	
+   	<!-- id 는 함수 이름과 동일하게 해야함 -->
+   	
+   	<!-- 게시판 글쓰기 -->
+  	<select id="selectBorderView" statementType="CALLABLE" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+  	CALL web_main.selectBorderView(#{borderId},#{ref_cursor, mode=OUT, jdbcType=CURSOR, javaType=ResultSet, resultMap=borderResultMap})
+  	</select>
+    
+    <!-- 답글 -->
+  	<select id="insertBorderReply" statementType="CALLABLE" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+  	CALL web_main.insertBorderReply(#{borderId},#{userId},#{userIp},#{title},#{mytextarea})
+  	</select>
+  	
+  	<!-- 수정 -->
+  	<select id="updateBorderEdit" statementType="CALLABLE" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+  	CALL web_main.updateBorderEdit(#{borderId},#{userId},#{userIp},#{title},#{mytextarea})
+  	</select>
+  	
+  	<!-- 삭제 -->
+  	<select id="updateBorderRemove" statementType="CALLABLE" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+  	CALL web_main.updateBorderRemove(#{borderId},#{userId},#{userIp})
+  	</select>
+  	
+  	
+</mapper>
